@@ -51,4 +51,13 @@ class ActorNetwork(keras.model):
         
         self.fc1 = Dense(self.fc1_dims, activation='relu')
         self.fc2 = Dense(self.fc2_dims, activation='relu')
-        self.mu = Dense(self.n_actions, activation='')
+        self.mu = Dense(self.n_actions, activation='tanh')
+
+    def call(self, state):
+        prob = self.fc1(state)
+        prob = self.fc2(prob)
+
+        # if action bounds not +/- 1, can multiply here
+        mu = self.mu(prob)
+
+        return mu
